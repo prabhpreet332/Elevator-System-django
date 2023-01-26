@@ -59,7 +59,7 @@ class CommonConfig(Configuration):
     'corsheaders.middleware.CorsMiddleware',
     ]
 
-    ROOT_URLCONF = "elevator_system.urls"
+    ROOT_URLCONF = "elevator_system.elevator_system.urls"
 
     TEMPLATES = [
         {
