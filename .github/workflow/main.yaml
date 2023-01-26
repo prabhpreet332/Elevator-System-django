@@ -1,0 +1,38 @@
+name: GitHub Actions for Python (Django) code base
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+on: [push]
+jobs:
+  linting:
+    name: Linting
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: Install the dependencies
+        run: pip install -r requirements-ci.txt
+      - run: bash ${{ github.workspace }}/scripts/ci-run-linting.sh
+        shell: bash
+
+  unittests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: Install the dependencies
+        run: pip install -r requirements-ci.txt
+      - run: echo "unit tests successful"
+    needs:
+      - linting
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: Install the dependencies
+        run: pip install -r requirements-ci.txt
+      - run: echo "Build successful"
+    needs:
+      - unittests
