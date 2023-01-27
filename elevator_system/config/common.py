@@ -1,12 +1,14 @@
 import os
-from configurations import Configuration
 from pathlib import Path
+
+from configurations import Configuration
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
 class CommonConfig(Configuration):
-    DEBUG=os.environ.get("DEBUG", True)
+    DEBUG = os.environ.get("DEBUG", True)
 
     """
     Django settings for elevator_system project.
@@ -20,8 +22,6 @@ class CommonConfig(Configuration):
     https://docs.djangoproject.com/en/4.1/ref/settings/
     """
 
-
-
     # Quick-start development settings - unsuitable for production
     # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
@@ -32,7 +32,6 @@ class CommonConfig(Configuration):
 
     ALLOWED_HOSTS = []
 
-
     # Application definition
 
     INSTALLED_APPS = [
@@ -42,9 +41,8 @@ class CommonConfig(Configuration):
         "django.contrib.sessions",
         "django.contrib.messages",
         "django.contrib.staticfiles",
-            'corsheaders',
-        'rest_framework',
-
+        "corsheaders",
+        "rest_framework",
         "elevator",
     ]
 
@@ -56,10 +54,8 @@ class CommonConfig(Configuration):
         "django.contrib.auth.middleware.AuthenticationMiddleware",
         "django.contrib.messages.middleware.MessageMiddleware",
         "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    'corsheaders.middleware.CorsMiddleware',
+        "corsheaders.middleware.CorsMiddleware",
     ]
-
-    ROOT_URLCONF = "elevator_system.elevator_system.urls"
 
     TEMPLATES = [
         {
@@ -79,7 +75,6 @@ class CommonConfig(Configuration):
 
     WSGI_APPLICATION = "elevator_system.wsgi.application"
 
-
     # Database
     # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
@@ -90,13 +85,12 @@ class CommonConfig(Configuration):
         }
     }
 
-
     # Password validation
     # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
     AUTH_PASSWORD_VALIDATORS = [
         {
-            "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+            "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",  # noqa
         },
         {
             "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
@@ -109,7 +103,6 @@ class CommonConfig(Configuration):
         },
     ]
 
-
     # Internationalization
     # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
@@ -121,7 +114,6 @@ class CommonConfig(Configuration):
 
     USE_TZ = True
 
-
     # Static files (CSS, JavaScript, Images)
     # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
@@ -132,5 +124,4 @@ class CommonConfig(Configuration):
 
     DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-    CORS_ORIGIN_WHITELIST = [
-    ]
+    CORS_ORIGIN_WHITELIST = []
