@@ -21,7 +21,12 @@ jobs:
         uses: actions/checkout@v3
       - name: Install the dependencies
         run: pip install -r ${{ github.workspace }}/requirements-ci.txt
-      - run: echo "unit tests successful"
+      - name: Runs Unitests 
+        run: coverage run manage.py test --settings=elevator_system.config.test
+      - name: Coverage report
+        run: |
+          coverage report
+          coverage html
     needs:
       - linting
 
