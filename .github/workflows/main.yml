@@ -1,5 +1,5 @@
-name: GitHub Actions for Python (Django) code base
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+name: GitHub Actions Workflow codebase push pipeline
+run-name: ${{ github.actor }} triggered the push pipeline 🚀
 on: [push]
 jobs:
   linting:
