@@ -1,5 +1,5 @@
-name: GitHub Actions for Python (Django) code base
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+name: GitHub Actions Workflow codebase push pipeline
+run-name: ${{ github.actor }} triggered the push pipeline 🚀
 on: [push]
 jobs:
   linting:
@@ -21,7 +21,12 @@ jobs:
         uses: actions/checkout@v3
       - name: Install the dependencies
         run: pip install -r ${{ github.workspace }}/requirements-ci.txt
-      - run: echo "unit tests successful"
+      - name: Runs Unitests 
+        run: coverage run elevator_system/manage.py test --settings=elevator_system.config.test
+      - name: Coverage report
+        run: |
+          coverage report
+          coverage html
     needs:
       - linting
 

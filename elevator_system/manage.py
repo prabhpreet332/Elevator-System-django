@@ -6,15 +6,10 @@ import sys
 
 def main():
     """Run administrative tasks."""
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config")
-    os.environ.setdefault("DJANGO_CONFIGURATION", "LocalConfig")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "elevator_system.config.local")
 
-    import configurations
-
-    configurations.setup()
     try:
-        from configurations.management import execute_from_command_line
-
+        from django.core.management import execute_from_command_line
     except ImportError as exc:
         try:
             import django  # noqa
