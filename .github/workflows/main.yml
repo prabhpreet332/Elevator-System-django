@@ -22,7 +22,7 @@ jobs:
       - name: Install the dependencies
         run: pip install -r ${{ github.workspace }}/requirements-ci.txt
       - name: Runs Unitests 
-        run: coverage run manage.py test --settings=elevator_system.config.test
+        run: coverage run elevator_system/manage.py test --settings=elevator_system.config.test
       - name: Coverage report
         run: |
           coverage report
