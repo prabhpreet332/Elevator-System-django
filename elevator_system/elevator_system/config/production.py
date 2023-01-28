@@ -1,5 +1,3 @@
-from .common import CommonConfig
+from .common import *  # noqa
 
-
-class ProductionConfig(CommonConfig):
-    DEBUG = False
+DEBUG = False

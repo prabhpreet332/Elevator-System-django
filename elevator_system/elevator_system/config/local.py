@@ -1,5 +1,4 @@
-from .common import *
-
+from .common import *  # noqa
 
 DEBUG = True
-ALLOWED_HOSTS=['*']
+ALLOWED_HOSTS = ["*"]
