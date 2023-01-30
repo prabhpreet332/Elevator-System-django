@@ -1,10 +1,9 @@
-from rest_framework import viewsets
-
 from elevator_admin.models import ElevatorRequest, ElevatorSystem
 from elevator_admin.serializers import (
     ElevatorRequestSerializer,
     ElevatorSystemSerializer,
 )
+from rest_framework import viewsets
 
 
 class ElevatorSystemViewSet(viewsets.ModelViewSet):

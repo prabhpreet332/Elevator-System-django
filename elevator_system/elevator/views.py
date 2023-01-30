@@ -1,7 +1,6 @@
-from rest_framework import viewsets
-
 from elevator.models import Elevator, Floor
 from elevator.serializers import ElevatorSerializer, FloorSerializer
+from rest_framework import viewsets
 
 
 class ElevatorViewSet(viewsets.ModelViewSet):

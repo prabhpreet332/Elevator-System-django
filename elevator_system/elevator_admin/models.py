@@ -3,9 +3,8 @@ import uuid
 from django.db import models
 from django.db.models import Q
 from django_extensions.db.models import TimeStampedModel
-from model_utils.models import SoftDeletableModel
-
 from elevator.models import Elevator
+from model_utils.models import SoftDeletableModel
 
 
 class ElevatorSystem(SoftDeletableModel):

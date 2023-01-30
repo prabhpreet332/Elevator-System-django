@@ -1,6 +1,5 @@
-from rest_framework import serializers
-
 from elevator_admin.models import ElevatorRequest, ElevatorSystem
+from rest_framework import serializers
 
 
 class ElevatorSystemSerializer(serializers.ModelSerializer):

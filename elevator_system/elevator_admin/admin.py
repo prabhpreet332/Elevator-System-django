@@ -1,5 +1,4 @@
 from django.contrib import admin
-
 from elevator_admin.models import ElevatorRequest, ElevatorSystem
 
 

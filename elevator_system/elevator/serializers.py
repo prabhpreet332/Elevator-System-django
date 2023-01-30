@@ -1,6 +1,5 @@
-from rest_framework import serializers
-
 from elevator.models import Elevator, Floor
+from rest_framework import serializers
 
 
 class ElevatorSerializer(serializers.ModelSerializer):

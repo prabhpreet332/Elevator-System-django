@@ -16,10 +16,9 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import include, path
-from rest_framework import routers
-
 from elevator import views as elevator_views
 from elevator_admin import views as admin_views
+from rest_framework import routers
 
 router = routers.DefaultRouter()
 router.register(r"elevator", elevator_views.ElevatorViewSet, "elevator")
