@@ -16,11 +16,18 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import include, path
-from elevator import views
 from rest_framework import routers
 
+from elevator import views as elevator_views
+from elevator_admin import views as admin_views
+
 router = routers.DefaultRouter()
-router.register(r"elevator", views.ElevatorView, "todo")
+router.register(r"elevator", elevator_views.ElevatorViewSet, "elevator")
+router.register(r"floor", elevator_views.FloorViewSet, "floor")
+router.register(r"system/admin", admin_views.ElevatorSystemViewSet, "elevator_system")
+router.register(
+    r"elevator/request", admin_views.ElevatorRequestViewSet, "elevator_request"
+)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
