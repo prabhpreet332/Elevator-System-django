@@ -3,9 +3,9 @@ from rest_framework import status  # noqa
 from rest_framework.test import APIClient, APITestCase  # noqa
 
 
-class TestElevator(APITestCase):
+class TestElevator2(APITestCase):
     def setUp(self) -> None:
         return super().setUp()
 
-    def test_dummy(self):
+    def test_dummy2(self):
         self.assertEqual(1, 1)
