@@ -1,0 +1,14 @@
+.git/
+.coverage
+env*/
+venv/
+htmlcov/
+__pycache__/
+Dockerfile
+docker-compose.yaml
+.gitignore
+.dockerignore
+*sqlite*
+*.yaml
+*.yml
+*.cfg
