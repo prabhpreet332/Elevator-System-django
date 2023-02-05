@@ -1,13 +1,79 @@
-from elevator.models import Elevator, Floor
+from elevator.models import Elevator, ElevatorDoorChoices, ElevatorStatusChoices, Floor
 from elevator.serializers import ElevatorSerializer, FloorSerializer
-from rest_framework import viewsets
+from rest_framework import status, viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
 
-class ElevatorViewSet(viewsets.ModelViewSet):
+class ElevatorViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = ElevatorSerializer
     queryset = Elevator.objects.all()
 
+    @action(detail=True, methods=["get"], url_path="status")
+    def get_elevator_status(self, request, pk, *args, **kwargs):
+        elevator_id = pk
+        try:
+            elevator = Elevator.objects.get(id=elevator_id)
+        except Elevator.DoesNotExist:
+            return Response(
+                {"message": "Elevator ID not Found"}, status=status.HTTP_200_OK
+            )
 
-class FloorViewSet(viewsets.ModelViewSet):
+        return Response(
+            {
+                "message": f"Elevator status extracted for the elevator {elevator.elevator_id}",
+                "status": elevator.status,
+            },
+            status=status.HTTP_200_OK,
+        )
+
+    @action(detail=True, methods=["post"], url_path="door-toggle")
+    def toggle_doors(self, request, pk, *args, **kwargs):
+
+        elevator_id = pk
+
+        try:
+            elevator = Elevator.objects.get(id=elevator_id)
+        except Elevator.DoesNotExist:
+            return Response(
+                {"message": "Elevator ID not Found"}, status=status.HTTP_200_OK
+            )
+        prev_door_status = elevator.door_status
+        if elevator.status == ElevatorStatusChoices.AVAILABLE.value:
+            if elevator.door_status == ElevatorDoorChoices.CLOSE.value:
+                elevator.update(
+                    {
+                        "door_status": ElevatorDoorChoices.OPEN.value,
+                        "status": ElevatorStatusChoices.BUSY.value,
+                    }
+                )
+            else:
+                elevator.update(
+                    {
+                        "door_status": ElevatorDoorChoices.CLOSE.value,
+                        "status": ElevatorStatusChoices.AVAILABLE.value,
+                    }
+                )
+        elif (
+            elevator.status == ElevatorStatusChoices.BUSY.value
+            and elevator.door_status == ElevatorDoorChoices.OPEN.value
+        ):
+            elevator.update(
+                {
+                    "door_status": ElevatorDoorChoices.CLOSE.value,
+                    "status": ElevatorStatusChoices.AVAILABLE.value,
+                }
+            )
+        return Response(
+            {
+                "message": f"Elevator Door status Updated for the elevator {elevator.elevator_id}",
+                "new_door_status": elevator.door_status,
+                "previous_door_status": prev_door_status,
+            },
+            status=status.HTTP_200_OK,
+        )
+
+
+class FloorViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = FloorSerializer
     queryset = Floor.objects.all()

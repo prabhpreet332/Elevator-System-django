@@ -21,11 +21,21 @@ from elevator_admin import views as admin_views
 from rest_framework import routers
 
 router = routers.DefaultRouter()
-router.register(r"elevator", elevator_views.ElevatorViewSet, "elevator")
-router.register(r"floor", elevator_views.FloorViewSet, "floor")
-router.register(r"system/admin", admin_views.ElevatorSystemViewSet, "elevator_system")
 router.register(
-    r"elevator/request", admin_views.ElevatorRequestViewSet, "elevator_request"
+    r"elevator",
+    elevator_views.ElevatorViewSet,
+)
+router.register(
+    r"floor",
+    elevator_views.FloorViewSet,
+)
+router.register(
+    r"system/admin",
+    admin_views.ElevatorSystemViewSet,
+)
+router.register(
+    r"elevator-request",
+    admin_views.ElevatorRequestViewSet,
 )
 
 urlpatterns = [
