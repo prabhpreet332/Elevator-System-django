@@ -33,42 +33,48 @@ class ElevatorViewSet(viewsets.ReadOnlyModelViewSet):
         elevator_id = pk
 
         try:
-            elevator = Elevator.objects.get(id=elevator_id)
+            Elevator.objects.get(id=elevator_id)
         except Elevator.DoesNotExist:
             return Response(
                 {"message": "Elevator ID not Found"}, status=status.HTTP_200_OK
             )
+        elevator = Elevator.objects.filter(id=elevator_id).first()
+
         prev_door_status = elevator.door_status
         if elevator.status == ElevatorStatusChoices.AVAILABLE.value:
             if elevator.door_status == ElevatorDoorChoices.CLOSE.value:
-                elevator.update(
-                    {
-                        "door_status": ElevatorDoorChoices.OPEN.value,
-                        "status": ElevatorStatusChoices.BUSY.value,
-                    }
-                )
+                elevator.door_status = ElevatorDoorChoices.OPEN.value
+                elevator.status = ElevatorStatusChoices.BUSY.value
+                elevator.save()
+
             else:
-                elevator.update(
-                    {
-                        "door_status": ElevatorDoorChoices.CLOSE.value,
-                        "status": ElevatorStatusChoices.AVAILABLE.value,
-                    }
-                )
+                elevator.door_status = ElevatorDoorChoices.CLOSE.value
+                elevator.status = ElevatorStatusChoices.AVAILABLE.value
+                elevator.save()
+
         elif (
             elevator.status == ElevatorStatusChoices.BUSY.value
             and elevator.door_status == ElevatorDoorChoices.OPEN.value
         ):
-            elevator.update(
+            elevator.door_status = ElevatorDoorChoices.CLOSE.value
+            elevator.status = ElevatorStatusChoices.AVAILABLE.value
+            elevator.save()
+
+        else:
+            return Response(
                 {
-                    "door_status": ElevatorDoorChoices.CLOSE.value,
-                    "status": ElevatorStatusChoices.AVAILABLE.value,
-                }
+                    "message": f"Elevator Door Cannot be toggled for the elevator {elevator.elevator_id}",
+                    "elevator_status": elevator.status,
+                },
+                status=status.HTTP_200_OK,
             )
+
         return Response(
             {
                 "message": f"Elevator Door status Updated for the elevator {elevator.elevator_id}",
                 "new_door_status": elevator.door_status,
                 "previous_door_status": prev_door_status,
+                "elevator_status": elevator.status,
             },
             status=status.HTTP_200_OK,
         )
