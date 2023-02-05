@@ -1,9 +1,11 @@
 import uuid
 
+from elevator.models import ElevatorStatusChoices
 from elevator_admin.models import ElevatorRequest, ElevatorSystem
 from elevator_admin.serializers import (
     ElevatorRequestSerializer,
     ElevatorSystemInputSerializer,
+    ElevatorSystemMaintenanceSerializer,
     ElevatorSystemOutputSerializer,
 )
 from rest_framework import status, viewsets
@@ -49,20 +51,20 @@ class ElevatorSystemViewSet(viewsets.ModelViewSet):
         )
 
     # @action()
-    # post -- mark elevator as under maintenance
+    # post -- mark elevator as under maintenance [done]
     #       -- if elevator is in maintenance - unmark the requests that elevator accepted as false
     @action(detail=True, methods=["post"], url_path="mark-maintenance")
     def mark_for_maintenance(self, request, pk=None, *args, **kwargs):
-        data = request.data
         system_id = pk
-        try:
-            elevator_system = ElevatorSystem.objects.get(id=system_id)
-        except ElevatorSystem.DoesNotExist:
-            return Response(
-                {"message": "System ID not Found"}, status=status.HTTP_200_OK
-            )
 
+        serializer = ElevatorSystemMaintenanceSerializer(
+            data=request.data, context={"system_id": system_id}
+        )
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
         from elevator.models import Elevator
+
+        elevator_system = ElevatorSystem.objects.get(id=system_id)
 
         elevator_for_maintenance = Elevator.objects.filter(
             system=elevator_system, id__in=data["elevators"]
@@ -73,7 +75,10 @@ class ElevatorSystemViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_200_OK,
             )
 
-        utils.mark_elevator_for_maintenance(elevator_for_maintenance)
+        elevator_for_maintenance.filter(
+            status=ElevatorStatusChoices.AVAILABLE.value
+        ).update(**{"status": ElevatorStatusChoices.UNDER_MAINTENANCE.value})
+
         return Response(
             {
                 "message": "Elevator status updated to Under-Maintenance.",

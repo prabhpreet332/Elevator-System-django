@@ -14,9 +14,6 @@ class ElevatorSystem(SoftDeletableModel):
     floor_count = models.IntegerField(null=True, default=0)
     elevator_count = models.IntegerField(null=True, default=0)
 
-    # bottommost_floor = models.IntegerField(null=True)
-    # topmost_floor = models.IntegerField(null=True)
-
     @property
     def is_operating(self):
         idle_elevators_count = (

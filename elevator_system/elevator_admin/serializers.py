@@ -28,6 +28,7 @@ class ElevatorSystemInputSerializer(serializers.ModelSerializer):
         return errors
 
     def validate(self, data):
+        data = super().validate(data)
         errors = {}
 
         errors.update(self.floor_count_validation(data))
@@ -36,13 +37,47 @@ class ElevatorSystemInputSerializer(serializers.ModelSerializer):
         if errors:
             raise serializers.ValidationError(errors)
 
-        return super().validate(data)
+        return data
 
 
 class ElevatorSystemOutputSerializer(ElevatorSystemInputSerializer):
     class Meta:
         model = ElevatorSystem
         fields = ["id", "system_id"] + ElevatorSystemInputSerializer.Meta.fields
+
+
+class ElevatorSystemMaintenanceSerializer(serializers.ModelSerializer):
+    elevators = serializers.ListField(
+        child=serializers.IntegerField(allow_null=False), allow_empty=False
+    )
+
+    class Meta:
+        model = ElevatorSystem
+        fields = "__all__"
+
+    def validate(self, data):
+        data = super().validate(data)
+        errors = dict()
+
+        elevators = data["elevators"]
+
+        system_id = self.context["system_id"]
+        try:
+            system = ElevatorSystem.objects.get(id=system_id)
+        except ElevatorSystem.DoesNotExist:
+            errors.update({"system_id": "system id does not exists"})
+            raise serializers.ValidationError(errors)
+
+        from elevator.models import Elevator
+
+        for elevator_id in elevators:
+            if not Elevator.objects.filter(system=system, id=elevator_id).exists():
+                errors.update(
+                    {f"elevators.id={elevator_id}": "Does not exists for the system"}
+                )
+        if errors:
+            raise serializers.ValidationError(errors)
+        return data
 
 
 class ElevatorRequestSerializer(serializers.ModelSerializer):

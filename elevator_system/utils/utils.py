@@ -31,12 +31,3 @@ def initialize_elevators_floors(system):
         data["message"] = str(err)
 
     return data
-
-
-def mark_elevator_for_maintenance(elevators):
-
-    elevators.filter(status=ElevatorStatusChoices.AVAILABLE.value).update(
-        **{"status": ElevatorStatusChoices.UNDER_MAINTENANCE.value}
-    )
-
-    return None
