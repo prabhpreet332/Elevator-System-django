@@ -5,8 +5,8 @@ from model_utils.models import SoftDeletableModel
 
 
 class ElevatorStatusChoices(models.TextChoices):
-    BUSY = "Busy"
-    AVAILABLE = "Available"
+    BUSY = "busy"
+    AVAILABLE = "available"
     UNDER_MAINTENANCE = "Under Maintenance"
 
 

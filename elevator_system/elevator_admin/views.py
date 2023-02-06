@@ -1,5 +1,6 @@
 import uuid
 
+from django_filters.rest_framework import DjangoFilterBackend
 from elevator.models import ElevatorStatusChoices
 from elevator_admin.models import ElevatorRequest, ElevatorSystem
 from elevator_admin.serializers import (
@@ -19,6 +20,13 @@ from utils import elevator_manager, utils
 class ElevatorSystemViewSet(viewsets.ModelViewSet):
     serializer_class = ElevatorSystemOutputSerializer
     queryset = ElevatorSystem.objects.all()
+    http_method_names = ["get", "post", "delete"]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = [
+        "id",
+        "elevator_count",
+        "floor_count",
+    ]
 
     @action(detail=False, methods=["post"], url_path="initialize")
     def initialize(self, request, *args, **kwargs):
@@ -89,6 +97,16 @@ class ElevatorSystemViewSet(viewsets.ModelViewSet):
 class ElevatorRequestViewSet(viewsets.ModelViewSet):
     serializer_class = ElevatorRequestOutputSerializer
     queryset = ElevatorRequest.objects.all()
+    http_method_names = ["get", "post", "delete"]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = [
+        "system",
+        "elevator_assigned",
+        "current_floor_number",
+        "destination_floor_number",
+        "expected_elevator_direction",
+        "is_resolved",
+    ]
 
     def create(self, request, *args, **kwargs):
         serializer = ElevatorRequestInputSerializer(data=request.data)

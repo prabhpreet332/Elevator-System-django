@@ -1,3 +1,4 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from elevator.models import Elevator, ElevatorDoorChoices, ElevatorStatusChoices, Floor
 from elevator.serializers import ElevatorSerializer, FloorSerializer
 from rest_framework import status, viewsets
@@ -8,6 +9,15 @@ from rest_framework.response import Response
 class ElevatorViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = ElevatorSerializer
     queryset = Elevator.objects.all()
+
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = [
+        "system",
+        "status",
+        "door_status",
+        "direction",
+        "current_floor_number",
+    ]
 
     @action(detail=True, methods=["get"], url_path="status")
     def get_elevator_status(self, request, pk, *args, **kwargs):
@@ -83,3 +93,5 @@ class ElevatorViewSet(viewsets.ReadOnlyModelViewSet):
 class FloorViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = FloorSerializer
     queryset = Floor.objects.all()
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["system", "floor_number"]
