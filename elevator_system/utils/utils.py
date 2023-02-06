@@ -3,6 +3,15 @@ from elevator.models import Elevator, Floor
 
 
 def initialize_elevators_floors(system):
+    """Creates the elevator, floor objects in DB during initialization phase.
+
+    Args:
+        system: ElevatorSystem - Model Object
+
+    Returns:
+        data: dict - contains the elevators, floors created.
+    """
+
     floor_count = system.floor_count
     elevator_count = system.elevator_count
     data = {
