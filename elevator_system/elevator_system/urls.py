@@ -15,10 +15,30 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, re_path
 from elevator import views as elevator_views
 from elevator_admin import views as admin_views
 from rest_framework import routers
+from rest_framework_swagger.views import get_swagger_view
+
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+
+# schema_view = get_swagger_view(title='Elevator System APIs')
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Elevator System APIs",
+        default_version='v1',
+        description="Elevator System APIs",
+        terms_of_service="",
+        contact=openapi.Contact(email="prabhpreet.singh.pep@gmail.com"),
+        license=openapi.License(name="Elevator System APIs"),
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny,),
+)
 
 router = routers.DefaultRouter()
 router.register(
@@ -39,6 +59,14 @@ router.register(
 )
 
 urlpatterns = [
+    # path('doc/', schema_view),
+    re_path(r'^doc(?P<format>\.json|\.yaml)$',
+            schema_view.without_ui(cache_timeout=0), name='schema-json'),  #<-- Here
+    path('doc/', schema_view.with_ui('swagger', cache_timeout=0),
+         name='schema-swagger-ui'),  #<-- Here
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0),
+         name='schema-redoc'),  #<-- Here
     path("admin/", admin.site.urls),
     path("api/", include(router.urls)),
+
 ]

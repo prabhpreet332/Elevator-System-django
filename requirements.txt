@@ -6,3 +6,7 @@ django-extensions==3.2.1
 psycopg2-binary==2.9.5
 gunicorn==20.1.0
 django-filter==22.1
+# https://www.jasonmars.org/2020/04/22/add-swagger-to-django-rest-api-quickly-4-mins-without-hiccups/
+django-rest-swagger==2.2.0
+drf-yasg==1.21.4
+
