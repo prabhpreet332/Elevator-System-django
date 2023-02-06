@@ -3,7 +3,8 @@ import uuid
 from elevator.models import ElevatorStatusChoices
 from elevator_admin.models import ElevatorRequest, ElevatorSystem
 from elevator_admin.serializers import (
-    ElevatorRequestSerializer,
+    ElevatorRequestInputSerializer,
+    ElevatorRequestOutputSerializer,
     ElevatorSystemInputSerializer,
     ElevatorSystemMaintenanceSerializer,
     ElevatorSystemOutputSerializer,
@@ -88,13 +89,28 @@ class ElevatorSystemViewSet(viewsets.ModelViewSet):
 
 
 class ElevatorRequestViewSet(viewsets.ModelViewSet):
-    serializer_class = ElevatorRequestSerializer
+    serializer_class = ElevatorRequestOutputSerializer
     queryset = ElevatorRequest.objects.all()
 
-    # post -- create
     def create(self, request, *args, **kwargs):
+        serializer = ElevatorRequestInputSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
 
-        return super().create(request, *args, **kwargs)
+        system_id = data["system_id"]
+        system_obj = ElevatorSystem.objects.get(id=system_id)
+
+        request_values = {
+            "current_floor_number": data["current_floor_number"],
+            "destination_floor_number": data["destination_floor_number"],
+            "system": system_obj,
+        }
+        ElevatorRequest.objects.create(**request_values)
+
+        return Response(
+            {"message": "Created a request.", "data": data},
+            status=status.HTTP_200_OK,
+        )
 
     # process api
     @action(detail=True, methods=["post"], url_path="process-request")

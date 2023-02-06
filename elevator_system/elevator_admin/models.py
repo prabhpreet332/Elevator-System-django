@@ -29,7 +29,7 @@ class ElevatorSystem(SoftDeletableModel):
         return True
 
     def __str__(self):
-        return self.system_id
+        return str(self.id)
 
     def delete(self, using=None, soft=True, *args, **kwargs):
         # if all elevators are available? (later on)
@@ -74,4 +74,4 @@ class ElevatorRequest(TimeStampedModel, SoftDeletableModel):
             return ElevatorDirectionChoices.DOWN.value
 
     def __str__(self):
-        return self.request_id
+        return str(self.id)

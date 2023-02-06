@@ -80,7 +80,71 @@ class ElevatorSystemMaintenanceSerializer(serializers.ModelSerializer):
         return data
 
 
-class ElevatorRequestSerializer(serializers.ModelSerializer):
+class ElevatorRequestInputSerializer(serializers.ModelSerializer):
+    current_floor_number = serializers.IntegerField(allow_null=False)
+    destination_floor_number = serializers.IntegerField(allow_null=False)
+    system_id = serializers.IntegerField(allow_null=False)
+
     class Meta:
         model = ElevatorRequest
-        fields = "__all__"
+        fields = ["current_floor_number", "destination_floor_number", "system_id"]
+
+    def system_validate(self, data):
+        errors = dict()
+        system_id = data["system_id"]
+        system_objs = ElevatorSystem.objects.filter(id=system_id)
+        if system_objs.count() == 0:
+            errors[
+                "system.key"
+            ] = f"Elevator System with the value: {system_id} does not exist"
+            raise serializers.ValidationError(errors)
+        return errors
+
+    def floors_validate(self, data):
+        errors = dict()
+
+        system_id = data["system_id"]
+        system_obj = ElevatorSystem.objects.filter(id=system_id).first()
+
+        current_floor_number = data["current_floor_number"]
+        destination_floor_number = data["destination_floor_number"]
+        top_floor = system_obj.floor_count - 1
+
+        if not (current_floor_number <= top_floor and current_floor_number >= 0):
+            errors[
+                "current_floor_number.value"
+            ] = f"This value should be between Max Floor: {top_floor} and Min Floor: 0"
+
+        if not (
+            destination_floor_number <= top_floor and destination_floor_number >= 0
+        ):
+            errors[
+                "destination_floor_number.value"
+            ] = f"This value should be between Max Floor: {top_floor} and Min Floor: 0"
+
+        return errors
+
+    def validate(self, data):
+        data = super().validate(data)
+
+        errors = dict()
+
+        errors.update(self.system_validate(data))
+        errors.update(self.floors_validate(data))
+
+        if errors:
+            raise serializers.ValidationError(errors)
+
+        return data
+
+
+class ElevatorRequestOutputSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ElevatorRequest
+        fields = [
+            "id",
+            "current_floor_number",
+            "destination_floor_number",
+            "system",
+            "elevator_assigned",
+        ]
