@@ -60,3 +60,20 @@ Directories:
 
 
 ```
+
+## Packages installed
+1. requirements.txt
+    1. `Django` - Django base package
+    1. `django-cors-headers` - To have the CORS middleware to prevent CORS sharing vulnerability
+    1. `djangorestframework` - For building REST APIs
+    1. `django-model-utils` - For having SoftDeletable Models
+    1. `django-extensions` - For having Timestamped Models (for elevator requests)
+    1. `psycopg2-binary` - Postgres Driver for using with ORM
+    1. `gunicorn` - for having WSGI server (used with production settings)
+    1. `django-filter` - for adding query params support
+
+1. requirements-ci.txt
+    1. `black` - for formatting
+    1. `flake8` - for linting
+    1. `isort` - for formatting imports
+    1. `coverage` - for coverage reports
