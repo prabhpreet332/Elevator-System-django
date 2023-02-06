@@ -1,5 +1,5 @@
 from django.db import IntegrityError, transaction
-from elevator.models import Elevator, ElevatorStatusChoices, Floor
+from elevator.models import Elevator, Floor
 
 
 def initialize_elevators_floors(system):
