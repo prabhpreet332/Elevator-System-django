@@ -20,6 +20,7 @@ from utils import elevator_manager, utils
 class ElevatorSystemViewSet(viewsets.ModelViewSet):
     serializer_class = ElevatorSystemOutputSerializer
     queryset = ElevatorSystem.objects.all()
+    http_method_names = ["get", "post", "delete"]
     filter_backends = [DjangoFilterBackend]
     filterset_fields = [
         "id",
@@ -96,6 +97,7 @@ class ElevatorSystemViewSet(viewsets.ModelViewSet):
 class ElevatorRequestViewSet(viewsets.ModelViewSet):
     serializer_class = ElevatorRequestOutputSerializer
     queryset = ElevatorRequest.objects.all()
+    http_method_names = ["get", "post", "delete"]
     filter_backends = [DjangoFilterBackend]
     filterset_fields = [
         "system",
