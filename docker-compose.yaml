@@ -5,10 +5,10 @@ volumes:
         name: app_data
 
 services:
-    django: 
+    django:
         &django
         build:
-          context: ./
+            context: ./
         command: /app/scripts/start_script.sh server
         env_file:
             - .env/dev.env
@@ -16,13 +16,11 @@ services:
             - 8000:8000
         depends_on:
             - postgres
-        profiles:
-            - system
 
     unittest:
         <<: *django
         user: root
-        command: > 
+        command: >
             bash -c "pip install -r requirements-ci.txt && 
             coverage run elevator_system/manage.py test --settings=elevator_system.config.test &&
             coverage report &&
@@ -35,7 +33,6 @@ services:
         profiles:
             - dev
 
-
     postgres:
         image: postgres:13.3-alpine
         volumes:
@@ -46,5 +43,5 @@ services:
             POSTGRES_DB: postgres
             POSTGRES_HOST: postgres
             POSTGRES_PORT: 5432
-        profiles:
-            - system
+        ports:
+            - 5432:5432
