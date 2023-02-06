@@ -52,9 +52,6 @@ class ElevatorSystemViewSet(viewsets.ModelViewSet):
             status=status.HTTP_200_OK,
         )
 
-    # @action()
-    # post -- mark elevator as under maintenance [done]
-    #       -- if elevator is in maintenance - unmark the requests that elevator accepted as false
     @action(detail=True, methods=["post"], url_path="mark-maintenance")
     def mark_for_maintenance(self, request, pk=None, *args, **kwargs):
         system_id = pk

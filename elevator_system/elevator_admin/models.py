@@ -32,8 +32,6 @@ class ElevatorSystem(SoftDeletableModel):
         return str(self.id)
 
     def delete(self, using=None, soft=True, *args, **kwargs):
-        # if all elevators are available? (later on)
-        # else error
         from elevator.models import Elevator, Floor
 
         Elevator.objects.filter(system=self.id).delete()

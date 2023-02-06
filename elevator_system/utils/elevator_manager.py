@@ -75,7 +75,6 @@ class ElevatorManager:
                 and elevator.door_status == ElevatorDoorChoices.CLOSE.value
             ):
                 # when elevator is already fulfilling some other request
-
                 if elevator.direction == ElevatorDirectionChoices.UP.value:
                     requests = elevator_request_objs.filter(
                         current_floor_number__gte=elevator.current_floor_number,
