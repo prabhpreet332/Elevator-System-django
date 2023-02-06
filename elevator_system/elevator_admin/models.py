@@ -1,5 +1,3 @@
-import uuid
-
 from django.db import models
 from django.db.models import Q
 from django_extensions.db.models import TimeStampedModel
@@ -9,7 +7,6 @@ from model_utils.models import SoftDeletableModel
 
 class ElevatorSystem(SoftDeletableModel):
     id = models.AutoField(primary_key=True)
-    system_id = models.UUIDField(unique=True, null=False, default=uuid.uuid4)
 
     floor_count = models.IntegerField(null=True, default=0)
     elevator_count = models.IntegerField(null=True, default=0)
@@ -42,7 +39,6 @@ class ElevatorSystem(SoftDeletableModel):
 
 class ElevatorRequest(TimeStampedModel, SoftDeletableModel):
     id = models.AutoField(primary_key=True)
-    request_id = models.UUIDField(unique=True, null=False, default=uuid.uuid4)
     system = models.ForeignKey(
         to="elevator_admin.ElevatorSystem",
         null=False,
@@ -67,7 +63,6 @@ class ElevatorRequest(TimeStampedModel, SoftDeletableModel):
     is_resolved = models.BooleanField(default=False, null=False)
 
     def _get_expected_elevator_direction(self):
-
         floor_diff = self.destination_floor_number - self.current_floor_number
         if floor_diff > 0:
             return ElevatorDirectionChoices.UP.value

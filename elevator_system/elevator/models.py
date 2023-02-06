@@ -1,5 +1,3 @@
-import uuid
-
 from django.db import models
 from model_utils.models import SoftDeletableModel
 
@@ -7,7 +5,7 @@ from model_utils.models import SoftDeletableModel
 class ElevatorStatusChoices(models.TextChoices):
     BUSY = "busy"
     AVAILABLE = "available"
-    UNDER_MAINTENANCE = "Under Maintenance"
+    UNDER_MAINTENANCE = "under_maintenance"
 
 
 class ElevatorDirectionChoices(models.TextChoices):
@@ -23,7 +21,6 @@ class ElevatorDoorChoices(models.TextChoices):
 
 class Elevator(SoftDeletableModel):
     id = models.AutoField(primary_key=True)
-    elevator_id = models.UUIDField(unique=True, null=False, default=uuid.uuid4)
     system = models.ForeignKey(
         to="elevator_admin.ElevatorSystem",
         default=None,
@@ -60,7 +57,6 @@ class Elevator(SoftDeletableModel):
 
 class Floor(SoftDeletableModel):
     id = models.AutoField(primary_key=True)
-    floor_id = models.UUIDField(unique=True, null=False, default=uuid.uuid4)
     system = models.ForeignKey(
         to="elevator_admin.ElevatorSystem",
         null=False,
