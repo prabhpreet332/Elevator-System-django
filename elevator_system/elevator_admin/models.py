@@ -3,7 +3,7 @@ import uuid
 from django.db import models
 from django.db.models import Q
 from django_extensions.db.models import TimeStampedModel
-from elevator.models import Elevator, ElevatorStatusChoices,ElevatorDirectionChoices
+from elevator.models import Elevator, ElevatorDirectionChoices, ElevatorStatusChoices
 from model_utils.models import SoftDeletableModel
 
 
@@ -60,13 +60,13 @@ class ElevatorRequest(TimeStampedModel, SoftDeletableModel):
     destination_floor_number = models.IntegerField(null=False)
 
     expected_elevator_direction = models.CharField(
-    choices=ElevatorDirectionChoices.choices,
-    null=False,
-    max_length=20,
-    default=ElevatorDirectionChoices.IDLE.value,
+        choices=ElevatorDirectionChoices.choices,
+        null=False,
+        max_length=20,
+        default=ElevatorDirectionChoices.IDLE.value,
     )
 
-    is_resolved = models.BooleanField(default=False,null=False)
+    is_resolved = models.BooleanField(default=False, null=False)
 
     def _get_expected_elevator_direction(self):
 
@@ -75,13 +75,12 @@ class ElevatorRequest(TimeStampedModel, SoftDeletableModel):
             return ElevatorDirectionChoices.UP.value
         elif floor_diff < 0:
             return ElevatorDirectionChoices.DOWN.value
-        else: 
+        else:
             return ElevatorDirectionChoices.IDLE.value
-        
+
     def save(self, **kwargs):
         self.expected_elevator_direction = self._get_expected_elevator_direction()
         return super().save(**kwargs)
-
 
     def __str__(self):
         return str(self.id)

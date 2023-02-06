@@ -121,7 +121,7 @@ class ElevatorRequestInputSerializer(serializers.ModelSerializer):
             errors[
                 "destination_floor_number.value"
             ] = f"This value should be between Max Floor: {top_floor} and Min Floor: 0"
-        if  destination_floor_number == current_floor_number:
+        if destination_floor_number == current_floor_number:
             errors[
                 "current_floor_number.destination_floor_number.value"
             ] = "The values of `current_floor_number` and `destination_floor_number` should be different."
