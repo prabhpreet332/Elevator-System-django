@@ -5,6 +5,7 @@ from elevator_admin.models import ElevatorRequest, ElevatorSystem
 from elevator_admin.serializers import (
     ElevatorRequestInputSerializer,
     ElevatorRequestOutputSerializer,
+    ElevatorRequestProcessSerializer,
     ElevatorSystemInputSerializer,
     ElevatorSystemMaintenanceSerializer,
     ElevatorSystemOutputSerializer,
@@ -12,7 +13,7 @@ from elevator_admin.serializers import (
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from utils import utils
+from utils import elevator_manager, utils
 
 
 class ElevatorSystemViewSet(viewsets.ModelViewSet):
@@ -112,7 +113,41 @@ class ElevatorRequestViewSet(viewsets.ModelViewSet):
             status=status.HTTP_200_OK,
         )
 
-    # process api
+    @action(detail=True, methods=["post"], url_path="accept-request")
+    def accept_request(self, request, pk=None, *args, **kwargs):
+        serializer = ElevatorRequestProcessSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+
+        system_id = data["system_id"]
+        system_obj = ElevatorSystem.objects.get(id=system_id)
+
+        manager = elevator_manager.ElevatorManager(system_obj)
+        elevator_request_obj = ElevatorRequest.objects.filter(
+            elevator_assigned=None,
+            system=system_obj,
+        )
+        manager.accept_request(elevator_request_obj)
+        return Response(
+            {"message": "Created a request.", "data": data},
+            status=status.HTTP_200_OK,
+        )
+
     @action(detail=True, methods=["post"], url_path="process-request")
     def process_request(self, request, pk=None, *args, **kwargs):
-        pass
+        serializer = ElevatorRequestProcessSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+
+        system_id = data["system_id"]
+        system_obj = ElevatorSystem.objects.get(id=system_id)
+
+        manager = elevator_manager.ElevatorManager(system_obj)
+        elevator_request_obj = ElevatorRequest.objects.filter(
+            system=system_obj,
+        )
+        manager.process_request(elevator_request_obj)
+        return Response(
+            {"message": "Created a request.", "data": data},
+            status=status.HTTP_200_OK,
+        )

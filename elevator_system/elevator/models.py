@@ -13,6 +13,7 @@ class ElevatorStatusChoices(models.TextChoices):
 class ElevatorDirectionChoices(models.TextChoices):
     UP = "up"
     DOWN = "down"
+    IDLE = "idle"
 
 
 class ElevatorDoorChoices(models.TextChoices):
@@ -46,21 +47,12 @@ class Elevator(SoftDeletableModel):
         default=ElevatorDoorChoices.CLOSE.value,
     )
 
-    @property
-    def elevator_direction(self):
-        from elevator_admin.models import ElevatorRequest
-
-        request = ElevatorRequest.objects.filter(elevator_assigned=self.elevator_id)
-        if request.count() == 0:
-            self.status = ElevatorStatusChoices.AVAILABLE.value
-            return
-
-        request = request.first()
-        floor_diff = request.destination_floor_number - request.current_floor_number
-        if floor_diff > 0:
-            return self.ElevatorDirectionChoices.UP.value
-        elif floor_diff < 0:
-            return self.ElevatorDirectionChoices.DOWN.value
+    direction = models.CharField(
+        choices=ElevatorDirectionChoices.choices,
+        null=False,
+        max_length=20,
+        default=ElevatorDirectionChoices.IDLE.value,
+    )
 
     def __str__(self):
         return str(self.id)

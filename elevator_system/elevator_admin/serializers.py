@@ -121,6 +121,10 @@ class ElevatorRequestInputSerializer(serializers.ModelSerializer):
             errors[
                 "destination_floor_number.value"
             ] = f"This value should be between Max Floor: {top_floor} and Min Floor: 0"
+        if  destination_floor_number == current_floor_number:
+            errors[
+                "current_floor_number.destination_floor_number.value"
+            ] = "The values of `current_floor_number` and `destination_floor_number` should be different."
 
         return errors
 
@@ -148,3 +152,34 @@ class ElevatorRequestOutputSerializer(serializers.ModelSerializer):
             "system",
             "elevator_assigned",
         ]
+
+
+class ElevatorRequestProcessSerializer(serializers.ModelSerializer):
+    system_id = serializers.IntegerField(allow_null=False)
+
+    class Meta:
+        model = ElevatorRequest
+        fields = ["system_id"]
+
+    def system_validate(self, data):
+        errors = dict()
+        system_id = data["system_id"]
+        system_objs = ElevatorSystem.objects.filter(id=system_id)
+        if system_objs.count() == 0:
+            errors[
+                "system.key"
+            ] = f"Elevator System with the value: {system_id} does not exist"
+            raise serializers.ValidationError(errors)
+        return errors
+
+    def validate(self, data):
+        data = super().validate(data)
+
+        errors = dict()
+
+        errors.update(self.system_validate(data))
+
+        if errors:
+            raise serializers.ValidationError(errors)
+
+        return data
