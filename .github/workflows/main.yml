@@ -9,7 +9,9 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v3
       - name: Install the dependencies
-        run: pip install -r ${{ github.workspace }}/requirements-ci.txt
+        run: |
+          pip install -U pip setuptools wheel
+          pip install -r ${{ github.workspace }}/requirements-ci.txt
       - run: bash ${{ github.workspace }}/scripts/ci-lint.sh
         shell: bash
 
@@ -20,7 +22,9 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v3
       - name: Install the dependencies
-        run: pip install -r ${{ github.workspace }}/requirements-ci.txt
+        run: |
+          pip install -U pip setuptools wheel
+          pip install -r ${{ github.workspace }}/requirements-ci.txt
       - name: Runs Unitests
         run: coverage run elevator_system/manage.py test elevator_system --settings=elevator_system.config.test
       - name: Coverage report
@@ -35,7 +39,9 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v3
       - name: Install the dependencies
-        run: pip install -r ${{ github.workspace }}/requirements-ci.txt
+        run: |
+          pip install -U pip setuptools wheel
+          pip install -r ${{ github.workspace }}/requirements-ci.txt
       - run: echo "Build successful"
     needs:
       - unittests
