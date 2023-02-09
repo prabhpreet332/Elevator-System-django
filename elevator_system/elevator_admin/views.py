@@ -1,5 +1,3 @@
-import uuid
-
 from django_filters.rest_framework import DjangoFilterBackend
 from elevator.models import ElevatorStatusChoices
 from elevator_admin.models import ElevatorRequest, ElevatorSystem
