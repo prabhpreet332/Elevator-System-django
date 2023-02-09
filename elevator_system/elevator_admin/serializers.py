@@ -43,7 +43,7 @@ class ElevatorSystemInputSerializer(serializers.ModelSerializer):
 class ElevatorSystemOutputSerializer(ElevatorSystemInputSerializer):
     class Meta:
         model = ElevatorSystem
-        fields = ["id", "system_id"] + ElevatorSystemInputSerializer.Meta.fields
+        fields = ["id",] + ElevatorSystemInputSerializer.Meta.fields
 
 
 class ElevatorSystemMaintenanceSerializer(serializers.ModelSerializer):
