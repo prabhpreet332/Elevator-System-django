@@ -14,11 +14,11 @@ class ElevatorSystem(SoftDeletableModel):
     @property
     def is_operating(self):
         idle_elevators_count = (
-            Elevator.objects.filter(system=self.system_id)
+            Elevator.objects.filter(system=self.id)
             .exclude(Q(status=ElevatorStatusChoices.AVAILABLE.value))
             .count()
         )
-        total_elevators_count = Elevator.objects.filter(system=self.system_id)
+        total_elevators_count = Elevator.objects.filter(system=self.id)
 
         if total_elevators_count == idle_elevators_count:
             return False

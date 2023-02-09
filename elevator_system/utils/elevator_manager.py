@@ -29,7 +29,7 @@ class ElevatorManager:
         """
 
         elevators = Elevator.objects.filter(
-            system=self.system, status=ElevatorStatusChoices.BUSY.value
+            system=self.system, door_status=ElevatorDoorChoices.CLOSE.value
         )
         for elevator in elevators:
             if elevator_request_objs.count() == 0:
@@ -97,10 +97,7 @@ class ElevatorManager:
                 elevator.save()
                 requests.save()
 
-            elif (
-                elevator.status == ElevatorStatusChoices.BUSY.value
-                and elevator.door_status == ElevatorDoorChoices.CLOSE.value
-            ):
+            elif elevator.status == ElevatorStatusChoices.BUSY.value:
                 # when elevator is already fulfilling some other request
                 if elevator.direction == ElevatorDirectionChoices.UP.value:
                     requests = elevator_request_objs.filter(
