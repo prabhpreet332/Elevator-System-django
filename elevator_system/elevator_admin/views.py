@@ -36,8 +36,6 @@ class ElevatorSystemViewSet(viewsets.ModelViewSet):
 
         system_data = serializer.validated_data
 
-        system_id = uuid.uuid4()
-        system_data.update({"system_id": system_id})
         elevator_system = ElevatorSystem.objects.create(**system_data)
 
         initialized_system_data = utils.initialize_elevators_floors(elevator_system)
@@ -144,7 +142,7 @@ class ElevatorRequestViewSet(viewsets.ModelViewSet):
         )
         manager.accept_request(elevator_request_obj)
         return Response(
-            {"message": "Created a request.", "data": data},
+            {"message": "Accepted a request.", "data": data},
             status=status.HTTP_200_OK,
         )
 
@@ -163,6 +161,6 @@ class ElevatorRequestViewSet(viewsets.ModelViewSet):
         )
         manager.process_request(elevator_request_obj)
         return Response(
-            {"message": "Created a request.", "data": data},
+            {"message": "Processed a request.", "data": data},
             status=status.HTTP_200_OK,
         )

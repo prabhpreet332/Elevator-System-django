@@ -31,7 +31,7 @@ class ElevatorViewSet(viewsets.ReadOnlyModelViewSet):
 
         return Response(
             {
-                "message": f"Elevator status extracted for the elevator {elevator.elevator_id}",
+                "message": f"Elevator status extracted for the elevator {elevator.id}",
                 "status": elevator.status,
             },
             status=status.HTTP_200_OK,
@@ -73,7 +73,7 @@ class ElevatorViewSet(viewsets.ReadOnlyModelViewSet):
         else:
             return Response(
                 {
-                    "message": f"Elevator Door Cannot be toggled for the elevator {elevator.elevator_id}",
+                    "message": f"Elevator Door Cannot be toggled for the elevator {elevator.id}",
                     "elevator_status": elevator.status,
                 },
                 status=status.HTTP_200_OK,
@@ -81,7 +81,7 @@ class ElevatorViewSet(viewsets.ReadOnlyModelViewSet):
 
         return Response(
             {
-                "message": f"Elevator Door status Updated for the elevator {elevator.elevator_id}",
+                "message": f"Elevator Door status Updated for the elevator {elevator.id}",
                 "new_door_status": elevator.door_status,
                 "previous_door_status": prev_door_status,
                 "elevator_status": elevator.status,
