@@ -30,7 +30,7 @@ class ElevatorManager:
 
         elevators = Elevator.objects.filter(
             system=self.system, door_status=ElevatorDoorChoices.CLOSE.value
-        )
+        ).exclude(status=ElevatorStatusChoices.UNDER_MAINTENANCE.value)
         for elevator in elevators:
             if elevator_request_objs.count() == 0:
                 break
