@@ -77,3 +77,11 @@ Directories:
     1. `flake8` - for linting
     1. `isort` - for formatting imports
     1. `coverage` - for coverage reports
+
+## DockerHub Image artifactory
+Link: https://hub.docker.com/repository/docker/ps332/elevator-system-django/general
+### Image, Tag Nomenclature
+- Image Name: Name of repository (in lowercase)
+- Tag Name: Name of reference (branch/tag)_(branch-name/tag-name)
+    - eg: for branch - `feat/add-docker-build-job` Image and tag would be: ```ps332/elevator-system-django:refs_heads_feat_add-docker-build-job```
+
