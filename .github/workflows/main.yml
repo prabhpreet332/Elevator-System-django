@@ -58,3 +58,6 @@ jobs:
         run: |
           echo "1. Make sure to have the Repository created in the dockerhub of SAME name as this repo (BUT IN LOWERCASE)."
           echo "2. Make sure to have the secrets stored with the above names"
+    needs:
+      - linting
+      - unittests
