@@ -1,9 +1,7 @@
 name: GitHub Actions Workflow codebase push pipeline
 run-name: ${{ github.actor }} triggered the push pipeline 🚀
-on: 
-  push:
-    branches:
-      - "*"
+on: [push]
+
 jobs:
   linting:
     name: Linting
@@ -44,13 +42,13 @@ jobs:
       - name: Install the dependencies
         run: pip install -r requirements.txt
       - name: Docker Login
-        env: 
+        env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-      - name: Docker Build and Push 
-        env: 
+      - name: Docker Build and Push
+        env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           IMAGE_NAME: ${{ github.repository }}
           IMAGE_TAG: ${{ github.ref }}
@@ -60,4 +58,3 @@ jobs:
         run: |
           echo "1. Make sure to have the Repository created in the dockerhub of SAME name as this repo (BUT IN LOWERCASE)."
           echo "2. Make sure to have the secrets stored with the above names"
-
