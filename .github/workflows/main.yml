@@ -36,6 +36,7 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    environment: Development
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
