@@ -58,6 +58,6 @@ jobs:
           bash ${{ github.workspace }}/scripts/build-image.sh $DOCKER_USERNAME $IMAGE_NAME $IMAGE_TAG
       - name: Troubleshooting
         run: |
-          echo "1. Make sure to have the Repository created in the dockerhub of SAME name as this repo."
+          echo "1. Make sure to have the Repository created in the dockerhub of SAME name as this repo (BUT IN LOWERCASE)."
           echo "2. Make sure to have the secrets stored with the above names"
 

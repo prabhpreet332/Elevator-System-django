@@ -9,6 +9,7 @@ echo "Args recieved: $1 $2 $3"
 REPOSITORY_NAME=$2
 ARR_REPOSITORY_NAME=(${REPOSITORY_NAME///// })
 IMAGE_NAME=${ARR_REPOSITORY_NAME[1]}
+IMAGE_NAME=`echo "$IMAGE_NAME" | tr '[:upper:]' '[:lower:]'`
 
 # Removes the `/` from the branch name and replace it with `_`
 IMAGE_TAG=`echo "$3" | sed -r 's/[//]+/_/g'`
